@@ -16,7 +16,7 @@ const collections = ["notes"];
 
 const db = mongojs(databaseUrl, collections);
 
-db.on("error", error => {
+db.on("error", (error) => {
   console.log("Database Error:", error);
 });
 
@@ -31,10 +31,29 @@ app.get("/", (req, res) => {
 // 1. Save a note to the database's collection
 // POST: /submit
 // ===========================================
+app.post("/submit", (req, res) => {
+  const note = req.body;
+  db.notes.insert(note, (error, result) => {
+    if (error) {
+      res.send(error);
+    } else {
+      res.send(result);
+    }
+  });
+});
 
 // 2. Retrieve all notes from the database's collection
 // GET: /all
 // ====================================================
+app.get("/all", (req, res) => {
+  db.notes.find({}, (err, data) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.json(data);
+    }
+  });
+});
 
 // 3. Retrieve one note in the database's collection by it's ObjectId
 // TIP: when searching by an id, the id needs to be passed in
