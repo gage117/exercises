@@ -60,6 +60,16 @@ app.get("/all", (req, res) => {
 // as (mongojs.ObjectId(IdYouWantToFind))
 // GET: /find/:id
 // ==================================================================
+app.get("/find/:id", (req, res) => {
+  const id = mongojs.ObjectId(req.params.id);
+  db.notes.findOne({ _id: id }, (err, data) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.json(data);
+    }
+  });
+});
 
 // 4. Update one note in the database's collection by it's ObjectId
 // (remember, mongojs.ObjectId(IdYouWantToFind)
